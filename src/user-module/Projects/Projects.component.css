@@ -1,0 +1,13 @@
+.smaller {
+    font-size: 12px;
+}
+a {
+    margin-bottom: 8px;
+    display: block;
+    font-size: larger;
+    text-decoration: none;
+    color: inherit;
+}
+div {
+    margin-top: 640px;
+}

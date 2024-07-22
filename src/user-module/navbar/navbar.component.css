@@ -1,6 +1,8 @@
 a {
-    display: block;
+    display: inline-block;
     font-size: larger;
+    text-decoration: none;
+    color: inherit;
 }
 h1 {
     font-size: 72px;
