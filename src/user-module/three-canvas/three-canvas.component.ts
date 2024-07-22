@@ -57,7 +57,7 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
 
   private generateParticles(): void {
     
-    for (let i = 0; i < 20000; i++) {
+    for (let i = 0; i < 10000; i++) {
       const theta: number = Math.random() * Math.PI * 2;
       const phi: number = Math.acos((Math.random() * 2) - 1);
       const radius: number = this.radius;
@@ -76,7 +76,6 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
 
     const elapsedTime = this.clock.getElapsedTime();
     const rotationdelta = elapsedTime * 0.1
-    // Rotate the particles
     if (this.particles) {
       this.particles.rotation.x = rotationdelta;
       this.particles.rotation.y = rotationdelta;
