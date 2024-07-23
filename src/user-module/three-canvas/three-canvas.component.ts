@@ -16,7 +16,7 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
   private material: THREE.PointsMaterial = new THREE.PointsMaterial({
     size: 0.01,
     color: 0x7F7F7F,
-    sizeAttenuation: false
+    sizeAttenuation: true // Changed to true for better performance with size
   });
   private geometry: THREE.BufferGeometry = new THREE.BufferGeometry();
   private vertices: number[] = [];
@@ -30,6 +30,7 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
     this.initThreeJS();
     this.generateParticles();
     this.animate();
+    window.addEventListener('resize', this.onWindowResize, false);
   }
 
   private initThreeJS(): void {
@@ -37,7 +38,7 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
     this.scene.background = new THREE.Color(0xE6E6E6);
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setAnimationLoop(this.animate);
     this.renderer.domElement.style.position = 'absolute';
@@ -49,15 +50,13 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
     this.renderer.domElement.style.zIndex = '-1';
     document.body.appendChild(this.renderer.domElement);
 
-    this.camera.position.z = 5;
-    this.camera.position.x = 4;
-    this.camera.position.y = 2;
+    this.camera.position.set(4, 2, 5);
     this.clock = new THREE.Clock();
   }
 
   private generateParticles(): void {
-    
-    for (let i = 0; i < 10000; i++) {
+    const particleCount = 5000; // Reduced number of particles
+    for (let i = 0; i < particleCount; i++) {
       const theta: number = Math.random() * Math.PI * 2;
       const phi: number = Math.acos((Math.random() * 2) - 1);
       const radius: number = this.radius;
@@ -72,15 +71,19 @@ export class ThreeCanvasComponent implements OnInit, AfterViewInit {
   }
 
   private animate = (): void => {
-    requestAnimationFrame(this.animate);
-
     const elapsedTime = this.clock.getElapsedTime();
-    const rotationdelta = elapsedTime * 0.1
+    const rotationDelta = elapsedTime * 0.1;
     if (this.particles) {
-      this.particles.rotation.x = rotationdelta;
-      this.particles.rotation.y = rotationdelta;
+      this.particles.rotation.x = rotationDelta;
+      this.particles.rotation.y = rotationDelta;
     }
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  private onWindowResize = (): void => {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }
